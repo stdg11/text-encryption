@@ -1,7 +1,7 @@
 from random import randint
 
 def mainMenu():
-    print("1. Encrypt file\n2. Decrypt file\n3. exit")
+    print("1. Encrypt file\n2. Decrypt file\n3. Extended encrypt\n4. exit")
     userchoice = input("Select an option: ")
     if userchoice == "1":
         plaintext = readFile()
@@ -10,6 +10,9 @@ def mainMenu():
         ciphertext = readFile()
         print("Decrypted text:", decrypt(ciphertext))
     elif userchoice == "3":
+        plaintext = readFile()
+        print("Encrypted text:", extendedEncrypt(plaintext))
+    elif userchoice == "4":
         exit()
     else:
         exit()
@@ -69,5 +72,22 @@ def decrypt(ciphertext):
                 assoff += 94
             plaintext += chr(assoff)
     return plaintext
+
+def extendedEncrypt(plaintext):
+    key = genKey()
+    offset = calcOffset(key)
+    ciphertext = ""
+    count = 0
+    plaintext.replace(" ", "")
+    for char in plaintext:
+        count += 1
+        assoff = ord(char) + offset
+        if count %5 == 0:
+            ciphertext += " "
+        elif assoff > 126:
+            assoff -= 94
+        ciphertext += chr(assoff)
+    writeFile(ciphertext)
+    return ciphertext
 
 mainMenu()
